@@ -18,5 +18,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             }
             sendResponse({ success: true });
         });
+    } else if (request.action === "checkSite") {
+        const site = window.location.hostname;
+        chrome.storage.sync.get("blockedSites", function (data) {
+            const isBlocked = data.blockedSites.includes(site);
+            sendResponse({ isBlocked });
+        });
     }
+    return true; // Required to use sendResponse asynchronously
 });
